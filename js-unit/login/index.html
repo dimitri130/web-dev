@@ -4,56 +4,98 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <title>User Login</title>
   </head>
   <body>
     <h1>Login to access that juicy premium content</h1>
-	  
-<div class="container">
-	<div class="row">
-			<div class="input-group mb-3 col-6">
-				<div class="input-group-prepend ">
-					<span class="input-group-text" id="usernameBox">Email</span>
-				</div>
-			<input type="text" class="form-control" placeholder="email@gmail.com" aria-label="username" aria-describedby="usernameBox">
-			</div>
-	</div>
-	<div class="row">
-		<div class="input-group mb-3 col-6">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="passwordBox">Password</span>
-			</div>
-		<input type="text" class="form-control" placeholder="password" aria-label="password" aria-describedby="passwordBox">
-		</div>
-	</div>
-	<div class="row">
-	<div class="input-group mb-3 col-6">
-		<div class="input-group-prepend">
-			<span class="input-group-text" id="botCheck">What is x + y</span>
-		</div>
-	<input type="text" class="form-control" placeholder="#" aria-label="numberCheck" aria-describedby="botCheck">
-	</div>
-	</div>
-	<div class="row">
-	<button id="loginBtn" type="btn" class="btn btn-primary"> login </button>
-	</div>
-</div>
-  
-	  
-	<script>
-	  let docG = (id) => {return document.getElementById(id);}
-	  
-	  let loginClicked = (event) =>{
-		  console.log("loginClicked()");
-	  }
-	  
-	  docG("loginBtn").addEventListener("click", loginClicked);
-	</script>
-	  
+    <div class="container">
+      <div class="row">
+        <div class="input-group mb-3 col-6">
+          <div class="input-group-prepend ">
+            <span class="input-group-text" id="usernameBox">Email</span>
+          </div>
+          <input type="text" class="form-control" placeholder="email@gmail.com" aria-label="username" aria-describedby="usernameBox">
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-group mb-3 col-6">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="passwordBox">Password</span>
+          </div>
+          <input type="text" class="form-control" id="pword1" placeholder="password" aria-label="password" aria-describedby="passwordBox">
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-group mb-3 col-6">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="botCheck">
+              <span id="botq">What is x + y</span>
+            </span>
+          </div>
+          <input type="number" class="form-control loginform" placeholder="enter solution" id="antibotanswer" aria-label="numberCheck" aria-describedby="botCheck">
+        </div>
+      </div>
+      <div class="ml-5 mt-3">
+        <button id="loginBtn" type="btn" value="login" class="btn btn-primary btn-lg"> login </button>
+      </div>
+      <div id="errormsg" class="col-12 m-4 p-4">
+        <div class="d-none"> Enter Question </div>
+      </div>
+    </div>
+    <script>
+      let docG = (id) => {
+        return document.getElementById(id);
+      }
+      let loginClicked = (event) => {
+        let bHasError = false;
+        let pWordElem = docG("pword1")
+        let bValidPword = isValidPword(pWordElem.value);
+        console.log("bValidPword : " + isValidPword(pWordElem.value))
+        console.log("loginClicked()");
+        let errorDiv = docG('errormsg');
+        if (bValidPword === false) {
+          errorDiv.className = "d-block bg-danger text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " < p > Your password does not meet the criteria < /p>";
+          errorDiv.innerHTML += " < ul > ";
+          errorDiv.innerHTML += " < li > At least 5 characters < /li>";
+          errorDiv.innerHTML += " < li > NO dollar sign($) < /li>>";
+          errorDiv.innerHTML += " < li > NO asterisk( * ) < /li>";
+          errorDiv.innerHTML += " < /ul>";
+          pWordElem.select();
+          bHasError = true;
+        }
+        if (bHasError === false) {
+          errorDiv.className = "d-none";
+        }
+      }
+      let botAnswer = -1;
+      let generateBotQ = () => {
+        console.log("generateBotQ()")
+        let botQuest = docG('botq');
+        let n1 = Math.floor(Math.random() * 21) + 2;
+        let n2 = Math.floor(Math.random() * 21) + 2;
+        botAnswer = n1 + n2;
+        console.log('botAnswer' + botAnswer);
+        botQuest.innerHTML = "What is " + n1 + " + " + n2 + " ?";
+      }
+      let isValidPword = (str) => {
+        console.log("isValidPword " + str + ")");
+        if (str.length < 5) {
+          return false;
+        }
+        if (str.indexOf("$") > -1) {
+          return false;
+        }
+        if (str.indexOf("*") > -1) {
+          return false;
+        }
+        return true;
+      }
+      window.addEventListener('load', generateBotQ);
+      docG("loginBtn").addEventListener("click", loginClicked);
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
