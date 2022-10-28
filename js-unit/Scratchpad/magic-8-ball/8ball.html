@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<title>Magic 8Ball</title>
+</head>
+
+<body>
+	<h1 class="text-center">Magic 8Ball</h1>
+	<div class="input-group mb-3 col-6 text-center enter">
+		<div class="input-group-prepend">
+		<span class="input-group-text" id="basic-addon1">Question</span>
+		</div>
+		<input id="inputArea" type="text" class="form-control" placeholder="Your q here" aria-label="q here" aria-describedby="basic-addon1">
+	</div>
+	<img id="eightballpic" src="images/8ball-0.jpg" width="576" height="432" alt=""/>
+	<button id="askbttn" type="button" class="btn btn-primary">Answer!</button>
+	<div class="bg-danger text-light" >
+		<div class="d-none" id="errorD">
+			enter a question dumbass
+		</div>
+	</div>
+	
+<script>
+	let eightBall = () => {
+		console.log("8ball()");
+		let currentQuestion = document.getElementById("inputArea").value;
+		if(currentQuestion.length>0 && currentQuestion==priorQuestion){
+			alert("same question, same answer")
+			return;
+		}
+		else{
+			console.log("different questions")
+		}
+		let errorDiv = document.getElementById('errorD');
+		if(currentQuestion.length<5){
+			console.log(errorDiv);
+			errorDiv.className = "d-block";
+		}
+		else{
+		errorDiv.className = "d-none";
+		let src = document.getElementById('eightballpic').src;
+		let r = Math.floor(Math.random()*6);
+		if(document.getElementById('inputArea').value != priorQuestion){
+			document.getElementById('eightballpic').src = "images/8ball-" + r + ".jpg";
+		}
+			
+	}
+	priorQuestion = currentQuestion;
+	}
+	
+	let priorQuestion = "";
+
+	document.getElementById('askbttn').addEventListener('click', eightBall);
+	
+	document.getElementById('inputArea').addEventListener("keypress", function(e){
+		if(e.key== "Enter"){
+			console.log("enter check");
+			eightBall();
+		}
+	});
+	
+	</script>
+</body>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>

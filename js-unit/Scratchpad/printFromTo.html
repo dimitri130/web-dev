@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FromTo</title>
+    <meta name="description" content="description"/>
+    <meta name="author" content="author" />
+    <meta name="keywords" content="keywords" />
+    <style type="text/css">.body { width: auto; }</style>
+</head>
+
+<body>
+<script>
+	let printFromTo = (from, to) =>
+	{
+		console.log('es6 style');
+		let larger = to;
+		let smaller = from;
+		if(from>to){
+			larger = from;
+			smaller = to;
+		}
+		for(let i = smaller; i<=larger; i++){
+		console.log(i);
+		}
+	}
+	
+	let getRandNum = (max) =>{
+		console.log(2 + Math.floor(Math.random()*max))
+		
+	}
+</script>
+</body>
+</html>

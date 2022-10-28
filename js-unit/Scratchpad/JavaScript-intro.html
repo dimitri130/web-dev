@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello!</title>
+    <meta name="description" content="description"/>
+    <meta name="author" content="author" />
+    <meta name="keywords" content="keywords" />
+    <style type="text/css">.body { width: auto; }</style>
+      
+<script>
+      var x=3;
+      console.log(x);
+</script>
+      
+  </head>
+    
+  <body>
+      <form class="form-inline">
+          <div class="form-group mx-sm-3 mb-2">
+          <h1> Year Born Calc</h1>
+          <input type="number" id="age" placeholder="enter your birth year"/>
+          </div>
+          <input type="button" class="btn btn-primary mb-2" id="agebttn" value="calc"/>
+      </form>
+  <div id="answer"></div>
+  <div id="year"></div>   
+  </body>
+    <script>
+        var bttn = document.getElementById("agebttn");
+        
+        bttn.addEventListener("click", bttnClicked);
+    
+        function bttnClicked(){
+            console.log("bttn was clicked");
+            var age = document.getElementById("age");
+            var yearBorn = parseFloat(age.value);
+            var yearsAlive=calculate(yearBorn);
+            console.log(yearsAlive);
+            
+            var html="you were born in the year " + yearBorn;
+            document.getElementById('answer').innerHTML=html;
+            console.log(new Date().getFullYear()).innerHTML;
+        }
+        
+        function calculate(startingYear){
+            var dateObject = new Date();
+            var currentYr = dateObject.getFullYear();
+            return currentYr-startingYear;
+        }
+    </script>
+</html>

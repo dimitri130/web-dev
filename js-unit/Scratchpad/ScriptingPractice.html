@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello!</title>
+    <meta name="description" content="description"/>
+    <meta name="author" content="author" />
+    <meta name="keywords" content="keywords" />
+    <style type="text/css">.body { width: auto; }</style>
+      
+<script>
+      var x=3;
+      console.log(x);
+</script>
+      
+  </head>
+    
+  <body>
+      <form class="form-row">
+          <div class="form-group text-align-center mx-sm-3 mb-2">
+		  <h1> Year Born Calc</h1>
+          <input type="text" id="age" placeholder="enter your birth year"/>
+	      <input type="text" id="month" placeholder="enter your birth month"/>
+		  <input type="text" id="day" placeholder="enter your birth day"/>
+          </div>
+          <input type="button" class="btn btn-primary mb-2" id="agebttn" value="calc"/>
+      </form>
+  <div id="answer"></div>
+  <div id="year"></div>   
+  </body>
+    <script>
+        var bttn = document.getElementById("agebttn");
+        bttn.addEventListener("click", bttnClicked);
+		window.addEventListener("load", function(){
+			document.getElementById("age").focus();
+			document.getElementById("year").focus();
+			document.getElementById("year").value(1982);
+			document.getElementById("month").value(12);
+			document.getElementById("day").value(2);
+			bttnClicked();
+			})
+    
+		function calculate(yearBrn, monthBrn, dayBrn){
+            var dateObject = new Date();
+            var currentYr = dateObject.getFullYear();
+            var deltaYear = currentYr-yearBrn;
+			var deltaMonth = dateObject.getMonth() - monthBrn;
+			var totalMonths = deltaYear * 12 + deltaMonth;
+			var deltaDays = dateObject.getDays() - dayBrn;
+			var totalDays = totalMonths * 365 + deltaDays;
+			var totalSecs = totalDays*86400;
+			return totalDays;
+        }
+		
+		 
+		}
+		
+        function bttnClicked(){
+            console.log("bttn was clicked");
+            var age = document.getElementById("age");
+			var month = document.getElementById("month");
+			var day = document.getElementById("day");
+			var ageMonth = document.getElementById("month");
+			var ageDay = document.getElementById("day");
+            var yearBorn = parseFloat(age.value);
+			var monthBorn = parseFloat(month.value);
+			var dayBorn = parseFloat(day.value);
+			var yearsAlive = calculate(yearBorn);
+			var secondsAlive = calculateSecs(age, ageMonth, ageDay);
+			console.log(yearsAlive);
+			console.log(secondsAlive);
+            
+			
+			if (Number.isNaN(yearBorn)){
+				var errorMsg = "<div class='text-danger m-4'> Only Enter Numbers! </div>"
+				document.getElementById('answer').innerHTML = errorMsg;
+				document.getElementById("age").select();
+			}
+			else{
+				var html = "you were born in the year " + yearBorn;
+				html += "<br> You have been alive for " + yearsAlive + " years";
+				document.getElementById('answer').innerHTML = html;	
+				var htmlSecs = "you are " + secondsAlive + " seconds old";
+				document.getElementById('answer').innerHTML = html;
+			}
+			}
+
+        
+
+		
+    </script>
+</html>
