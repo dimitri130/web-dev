@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+
+	<script>
+	let arr = [ "abc", "def", "foo", "bar"];
+	let nums = [1, Math.PI, 33, Math.E, 666];
+	console.log("arr.length" + arr.length);
+	console.log("nums.length : ", nums.length);
+	console.log(nums[0]);
+	console.log(arr[0]);
+	console.log(nums[0]+arr[0]);
+
+	let scores = [50, 60, 80, 90, 100];
+		for(let i = 0; i<scores.length; i++){
+			console.log(scores[i]);
+				}
+		let sum = (scores) => {
+			let sums=0;
+					for(let i = 0; i<scores.length; i++){
+					sums+=scores[i];	
+							}
+					console.log(sums);
+					return sum;
+				}
+		let largest = (nums) => {
+			let largest = nums[0];
+			for(let i=i; i<nums.length; i++){
+				if(nums[i]>=largest){
+							largest = nums[i];}
+					}
+			return largest;
+
+				}
+		let smallest = (nums) =>{
+				let smallest = nums[0];
+					for(let i=i;i<nums.length; i++){
+						if(nums[i]<=smallest){
+								smallest = nums[i];}
+				}
+					return smallest; 
+				}
+		let average = (nums, dropLowest) => {
+					let mySum = sum(nums);
+					if(dropLowest === true){
+						let mySmallest = smallest(nums);
+						mySum -= mySmallest;
+						return mySum/(nums.length-1);
+							}
+				
+					return mySum/nums.length;
+				}
+
+		let timeSpeeds = [150, 300, 220, 150, 175];
+		let avgSpeed = average(timeSpeeds, true);
+		console.log(avgSpeed);
+    </script>
+
+  </head>
+  <body>
+    <h1 id="titleDiv" class="bg-primary p-3 m-3 text-center text-light rounded">Quiz Averager</h1>
+	<div class="container">
+		<div class="row">
+		<div class="input-group m-3 d-inline">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="quizadd">Add a Quiz:</span>
+                <input type="text" class="form-control" placeholder="Enter your next quiz score" id="quizgrade" aria-describedby="quizaddbutton">
+            
+				<button type="button" class="btn btn-primary ml-3 rounded ">Add New Quiz</button>
+				</div>
+            </div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-6 border-bottom border-right text-center">
+		<h2 id="scoresdiv" class="bg-success text-light rounded">Current Scores</h2>
+		<p id="scoresdivnums">4</p>	
+		</div>
+		<div class="col-md-6 border-bottom border-left text-center">
+		<h2 id="avediv" class="bg-success text-light rounded">Average</h2>
+		<p id="scoresdivnums">4</p>
+		</div>
+		</div>
+
+		<div class="row">	
+			<div id="errormsg" style="display:none;">
+			</div>
+	</div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
+
