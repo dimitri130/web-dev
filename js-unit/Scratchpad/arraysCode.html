@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+	<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>String Methods</title>
+    </head>
+	
+    <body>
+		<div class="row" id="tagout">
+		</div>
+		<script>
+	let arr = [ "abc", "def", "foo", "bar"];
+	let nums = [1, Math.PI, 33, Math.E, 666];
+	console.log("arr.length" + arr.length);
+	console.log("nums.length : ", nums.length);
+	console.log(nums[0]);
+	console.log(arr[0]);
+	console.log(nums[0]+arr[0]);
+
+	let scores = [50, 60, 80, 90, 100];
+		for(let i = 0; i<scores.length; i++){
+			console.log(scores[i]);
+				}
+		let sum = (scores) => {
+			let sums=0;
+					for(let i = 0; i<scores.length; i++){
+					sums+=scores[i];	
+							}
+					console.log(sums);
+					return sum;
+				}
+		let largest = (nums) => {
+			let largest = nums[0];
+			for(let i=i; i<nums.length; i++){
+				if(nums[i]>=largest){
+							largest = nums[i];}
+					}
+			return largest;
+
+				}
+		let smallest = (nums) =>{
+				let smallest = nums[0];
+					for(let i=i;i<nums.length; i++){
+						if(nums[i]<=smallest){
+								smallest = nums[i];}
+				}
+					return smallest; 
+				}
+		let average = (nums, dropLowest) => {
+					let mySum = sum(nums);
+					if(dropLowest === true){
+						let mySmallest = smallest(nums);
+						mySum -= mySmallest;
+						return mySum/(nums.length-1);
+							}
+				
+					return mySum/nums.length;
+				}
+
+		let timeSpeeds = [150, 300, 220, 150, 175];
+		let avgSpeed = average(timeSpeeds, true);
+		console.log(avgSpeed);
+
+			let docG = (id) => {return document.getElementById(id);}
+			let makeTags = (tag, cssClass, copy, times) => {
+
+			let htm = ""; 
+			for(let i = 0; i<times; i++)
+							{
+				htm += "<" + tag + " class='" + cssClass + "'>" + copy + " </" + tag + ">"
+										}
+			docG("tagout").innerHTML = htm;
+						} 
+
+
+		makeTags("div ", " col-md-4 ", "Javascript ", 9);
+		</script>
+	  
+	
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

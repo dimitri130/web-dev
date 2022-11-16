@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FromTo</title>
+    <meta name="description" content="description"/>
+    <meta name="author" content="author" />
+    <meta name="keywords" content="keywords" />
+    <style type="text/css">.body { width: auto; }</style>
+</head>
+
+<body>
+	<div class="container">
+		<div id="target">
+			</div>
+	</div>
+	</body>
+<script>
+	let docG = (id) => {return document.getElementById(id);}
+
+	let emails = [
+		"spadini@hell.com", 
+		"rodier@hacker.com", 
+		"sammy@coder.com",
+		"amelia@duplicator.com",
+		"foo@bar.com"
+		];
+	
+	let emailToAbbr = (email) => {
+		let atIndex = email.indexOf("@");
+
+		let firstPart = email.substring(0, atIndex);
+		let secondPart = email.substring(atIndex + 1);
+
+		let abbr = firstPart+secondPart;
+		return abbr;}
+
+	let emailsToAbbrs = (emailList) =>{
+		let htm = " <div class='row'>";
+	
+		for(let i = 0; i<emailList.length; i++){
+				htm += "<div class='col-12 cold-md-6 border p-2'>";
+				let abbr = emailToAbbr(emailList[i]);
+				htm += abbr ;
+				htm += "</div>";
+			}
+	htm += "</div>";
+	docG("target").innerHTML = htm;
+	}
+			temp = emailToAbbr(emailList[i]);}	
+			
+
+	let languages = [
+		"Javascript", 
+		"PHP", 
+		"Chicken",
+		"Java", 
+		"C++", 
+		"SQL", 
+		"Python"
+		];
+
+	let printArray = (arr) => {
+			for(let i = 0; i<arr.length; i++)
+			{
+				console.log(arr[i]);
+				}
+		}
+	printArray(languages);
+</script>
+</html>

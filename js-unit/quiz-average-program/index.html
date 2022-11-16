@@ -11,19 +11,10 @@
     <title>Hello, world!</title>
 
 	<script>
-	let arr = [ "abc", "def", "foo", "bar"];
-	let nums = [1, Math.PI, 33, Math.E, 666];
-	console.log("arr.length" + arr.length);
-	console.log("nums.length : ", nums.length);
-	console.log(nums[0]);
-	console.log(arr[0]);
-	console.log(nums[0]+arr[0]);
-
-	let scores = [50, 60, 80, 90, 100];
-		for(let i = 0; i<scores.length; i++){
-			console.log(scores[i]);
-				}
-		let sum = (scores) => {
+	let docG = (id) =>  {return document.getElementById(id);}
+	let quizzes = [];
+		
+		let sum = (quizzes) => {
 			let sums=0;
 					for(let i = 0; i<scores.length; i++){
 					sums+=scores[i];	
@@ -31,37 +22,12 @@
 					console.log(sums);
 					return sum;
 				}
-		let largest = (nums) => {
-			let largest = nums[0];
-			for(let i=i; i<nums.length; i++){
-				if(nums[i]>=largest){
-							largest = nums[i];}
-					}
-			return largest;
-
-				}
-		let smallest = (nums) =>{
-				let smallest = nums[0];
-					for(let i=i;i<nums.length; i++){
-						if(nums[i]<=smallest){
-								smallest = nums[i];}
-				}
-					return smallest; 
-				}
-		let average = (nums, dropLowest) => {
-					let mySum = sum(nums);
-					if(dropLowest === true){
-						let mySmallest = smallest(nums);
-						mySum -= mySmallest;
-						return mySum/(nums.length-1);
-							}
-				
+		let average = (quizzes) => {
+					let mySum = sum(quizzes);
 					return mySum/nums.length;
 				}
 
-		let timeSpeeds = [150, 300, 220, 150, 175];
-		let avgSpeed = average(timeSpeeds, true);
-		console.log(avgSpeed);
+		let addQuizClicked = (e) =>
     </script>
 
   </head>
