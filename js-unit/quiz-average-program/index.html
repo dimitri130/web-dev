@@ -10,26 +10,6 @@
 
     <title>Hello, world!</title>
 
-	<script>
-	let docG = (id) =>  {return document.getElementById(id);}
-	let quizzes = [];
-		
-		let sum = (quizzes) => {
-			let sums=0;
-					for(let i = 0; i<scores.length; i++){
-					sums+=scores[i];	
-							}
-					console.log(sums);
-					return sum;
-				}
-		let average = (quizzes) => {
-					let mySum = sum(quizzes);
-					return mySum/nums.length;
-				}
-
-		let addQuizClicked = (e) =>
-    </script>
-
   </head>
   <body>
     <h1 id="titleDiv" class="bg-primary p-3 m-3 text-center text-light rounded">Quiz Averager</h1>
@@ -38,29 +18,178 @@
 		<div class="input-group m-3 d-inline">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="quizadd">Add a Quiz:</span>
-                <input type="text" class="form-control" placeholder="Enter your next quiz score" id="quizgrade" aria-describedby="quizaddbutton">
+                <input type="text" class="form-control" placeholder="Enter your next quiz score" id="quizgrade" aria-describedby="quizadd">
             
-				<button type="button" class="btn btn-primary ml-3 rounded ">Add New Quiz</button>
+				<button type="button" id="addquizbttn" class="btn btn-primary ml-3 rounded ">Add New Quiz</button>
 				</div>
             </div>
 		</div>
 
 		<div class="row">
-		<div class="col-md-6 border-bottom border-right text-center">
-		<h2 id="scoresdiv" class="bg-success text-light rounded">Current Scores</h2>
-		<p id="scoresdivnums">4</p>	
+		<div class="col-12 col-md-6 border-bottom border-right ">
+		<h2 class="bg-success text-light rounded text-center p-2 mb-2">Current Scores</h2>
+		<div id="scoresdiv" class="h4 text-center p-2"></div>	
 		</div>
-		<div class="col-md-6 border-bottom border-left text-center">
-		<h2 id="avediv" class="bg-success text-light rounded">Average</h2>
-		<p id="scoresdivnums">4</p>
+		<div class="col-12 col-md-6 border-bottom border-left">
+		<h2 class="bg-success text-light rounded text-center p-2">Average</h2>
+		<div id="avediv" class="text-center font-weight-bold h4"></div>
 		</div>
 		</div>
-
-		<div class="row">	
-			<div id="errormsg" style="display:none;">
+		<div class="row mt-4">
+			<div class="col-10">
 			</div>
+			<div class="col-2">
+			<button type="button" id="clearbttn" class="btn rounded">Clear</button>
+			</div>
+		</div>
+		<div id="errormsg" class="d-none">
+			<article class="row">
+			<div class="col-12 m-4 p-4 bg-danger text-light"> 
+			Please try again. You entered an invalid number. 
+			</div>
+			</article>
+		</div>
 	</div>
 
+
+
+	<script>
+	let docG = (id) =>  {return document.getElementById(id);}
+	let quizzes = [];
+
+		let addQuizClicked = (e) =>{
+			console.log("addQuizClicked ()")
+			docG("errormsg").className = "d-none";
+
+		let scoreElem = docG("quizgrade"); 
+		let score = parseFloat(scoreElem.value);
+		if(Number.isNaN(score))
+					{
+							docG("errormsg").className="d-block";
+							scoreElem.select();
+							return;
+					}
+		quizzes.push(score);
+				let htm = "<div class='row'>";
+				for(let i = 0; i<quizzes.length; i++){
+					console.log(quizzes[i])
+					htm += "<div id='quiz_" + i + "' class='col-12 col-md-6 border p-2 mt-2 mb-2'>";
+					htm += quizzes[i];
+					htm += "</div>";
+				}
+					htm += "</div>";
+				docG("scoresdiv").innerHTML=htm;
+
+		docG("clearbttn").className= "btn btn-outline-dark";
+
+		let dropLowest=false;
+		let ave = average(quizzes, dropLowest);
+
+		docG("avediv").innerHTML = ave.toFixed(2);
+
+		scoreElem.value = "";
+		scoreElem.focus();
+				}
+
+
+
+		let clearAllClicked = (e) =>{
+			console.log("clearAllClicked()")
+			let scoreElem = docG("quizgrade");
+			let scoresElem = docG("scoresdiv");
+			let aveElem = docG("avediv");
+			docG("clearbttn").className= "btn btn-outline-dark";
+			quizzes = [];
+			scoreElem.value = "";
+			scoresElem.innerHTML= "";
+			aveElem.innerHTML = "";
+			scoreElem.focus();
+				}
+
+		let qDivClicked = (e) => {
+			console.log("clicked");
+			alert(e.target.id);
+			
+			let id = e.target.id;
+			let index = id.substring(id.indexOf("_") + 1);
+
+			console.log("quizzes["+index+"] : " + index);
+			quizzes.splice(index, 1);
+
+			let htm = "<div class='row'>";
+				for(let i = 0; i<quizzes.length; i++){
+					console.log(quizzes[i])
+					htm += "<div id='quiz_" + i + "' class='col-12 col-md-6 border p-2 mt-2 mb-2'>";
+					htm += quizzes[i];
+					htm += "</div>";
+				}
+					htm += "</div>";
+				docG("scoresdiv").innerHTML=htm;
+
+				let dropLowest=false;
+				let ave = average(quizzes, dropLowest);
+				docG("avediv").innerHTML = ave.toFixed(2);
+				}
+		
+
+		
+		
+		let sum = (quizzes) => {
+			let sums=0;
+					for(let i = 0; i<quizzes.length; i++){
+					sums+=quizzes[i];	
+							}
+					console.log(sums);
+					return sums;
+				}
+		
+		let smallest= (nums) => {
+			let smallest= nums[0];
+			for(let i=1; i<nums.length; i++){
+				if(nums[i]<=smallest){
+							smallest = nums[i];}
+					}
+			return smallest;
+				}
+		let average = (quizzes, dropLowest) => {
+					if(dropLowest){
+					let smallestNum = smallest(quizzes);
+					console.log(smallestNum);
+					let mySum = sum(quizzes)-smallestNum;
+					return mySum/quizzes.length-1;
+							}
+					let mySum = sum(quizzes);
+					console.log(mySum);
+					return mySum/quizzes.length;
+				}		
+		let go = () => {
+			let scoreElem = docG("quizgrade");
+				scoreElem.value= 85;
+				addQuizClicked();
+				scoreElem.value= 44;
+				addQuizClicked();
+
+				scoreElem.value= 100;
+				addQuizClicked();
+
+				scoreElem.value= 22;
+				addQuizClicked();
+				}
+		go();
+		
+	docG("addquizbttn").addEventListener("click", addQuizClicked );
+
+	docG("quizgrade").addEventListener("keydown", function(e){
+				if(e.code ==="Enter"){
+					e.preventDefault();
+					addQuizClicked();	
+						}
+	console.log("enterClicked");
+			})
+	docG("clearbttn").addEventListener("click", clearAllClicked);
+	docG("scoresdiv").addEventListener("click", qDivClicked);
+
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
