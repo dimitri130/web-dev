@@ -82,6 +82,39 @@
 
 		docG("clearbttn").className= "btn btn-outline-dark";
 
+		let ave = average(quizzes, dropLowest);
+
+		docG("avediv").innerHTML = ave.toFixed(2);
+
+		scoreElem.value = "";
+		scoreElem.focus();
+				}
+
+		let addQuizClicked = (e) =>{
+			console.log("addQuizClicked ()")
+			docG("errormsg").className = "d-none";
+
+		let scoreElem = docG("quizgrade"); 
+		let score = parseFloat(scoreElem.value);
+		if(Number.isNaN(score))
+					{
+							docG("errormsg").className="d-block";
+							scoreElem.select();
+							return;
+					}
+		quizzes.push(score);
+				let htm = "<div class='row'>";
+				for(let i = 0; i<quizzes.length; i++){
+					console.log(quizzes[i])
+					htm += "<div id='quiz_" + i + "' class='col-12 col-md-6 border p-2 mt-2 mb-2'>";
+					htm += quizzes[i];
+					htm += "</div>";
+				}
+					htm += "</div>";
+				docG("scoresdiv").innerHTML=htm;
+
+		docG("clearbttn").className= "btn btn-outline-dark";
+
 		let dropLowest=false;
 		let ave = average(quizzes, dropLowest);
 

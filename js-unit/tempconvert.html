@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+      <title>Temperature Convert</title>
+    </head>  
+    
+    <body>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>       
+       
+        
+        <div class="d-flex flex-column flex-md-row justify-content-center">
+            <div class="col-md-6">
+                <p class="p-2 text-center bg-success rounded text-white font-weight-bold mr-4" style="font-size:30px;">Temperature</p> 
+                <div class="d-block input-group">
+                  <div class="input-group-append">
+                    <input id="tempInput" type="number" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" style=margin-right:10px;>
+                      <select id="unitSelect" class="bg-info rounded mr-md-4">
+                          <option value="F">Farenheit</option>
+                          <option value="C">Celsius</option>
+                      </select>
+                  </div>   
+                </div>
+				
+			</div>
+            
+            
+            <div class=col-md-6>
+                <p class="p-2 text-center bg-success rounded text-white font-weight-bold col-md-auto ml-4" style="font-size:30px;">Result</p>   
+                <div class="d-block input-group ">
+                  <div class="input-group-append">
+                    <input disabled type="number" class="form-control ml-4" placeholder="" aria-label="" aria-describedby="basic-addon1" style=margin-right:10px;>
+					<select id="unitSelect1" class="bg-info rounded md-4"> 
+						<option value="F" >Farenheit</a>
+                        <option value="C">Celsius</a>
+                  </select>   
+                </div>
+        </div>
+		
+		</div>
+			
+		</div>
+
+		<div id="errormsg" class="d-none">
+			<article class="row">
+			<div class="col-12 m-4 p-4 bg-danger text-light"> 
+			Please input a number. 
+			</div>
+			</article>
+		</div>
+
+    			<br> 
+				<div id="tempresult"> 
+				</div>
+
+		
+</body>
+	<script>
+	let docG = (id) =>  {return document.getElementById(id);}
+	let temps = [];
+	let isCelsius = false;	
+	let cTof = "˚ Celsius = ";
+	let c2fResult = "˚ Fahrenheit"
+	let fToc= "˚ Fahrenheit = ";
+	let f2cResult = "˚ Celsius"
+		
+		let convertTemp = (tempval, isCelsius) => {
+			if(isCelsius){
+				let nuTempval = ((tempval*1.8)+32).toFixed(2);
+				return nuTempval;
+						}
+			let nuTempval = ((tempval-32)*.5556).toFixed(2);
+			return nuTempval
+				}
+	
+		let tempAdded= (e) =>{
+			console.log("tempAdded()");
+			docG("errormsg").className = "d-none";
+
+			let tempElem = docG("tempInput"); 
+			let tempVal = parseFloat(tempElem.value);
+			if(Number.isNaN(tempVal))
+					{
+							docG("errormsg").className="d-block";
+							tempElem.select();
+							return;
+					}
+			temps.push(tempVal);
+			let htm = "<div class='row'>";
+				for(let i = 0; i<temps.length; i++){
+					console.log(temps[i])
+					htm += "<div id='temp_" + i + "' class='p-2 mb-2 mt-2 text-center border col-md-6 ml-5'>";
+					htm += temps[i];
+					if(isCelsius){
+						htm+= cTof + convertTemp(temps[i], true) + c2fResult; 
+						console.log(convertTemp(temps[i], true));
+					}
+					if(isCelsius==false){
+						htm+= fToc + convertTemp(temps[i], false) + f2cResult; 
+						console.log(convertTemp(temps[i], false));
+					}
+					htm += "</div>";
+				}
+					htm += "</div>";
+				docG("tempresult").innerHTML=htm;
+
+			tempElem.value = "";
+			tempElem.focus();
+				}
+
+		let resultClicked = (e) => {
+			console.log("clicked");
+			
+			let id = e.target.id;
+			let index = id.substring(id.indexOf("_") + 1);
+
+			console.log("tempresult["+index+"] : " + index);
+			temps.splice(index, 1);
+
+				let htm = "<div class='row'>";
+				for(let i = 0; i<temps.length; i++){
+					console.log(temps[i])
+					htm += "<div id='temp_" + i + "' class='p-2 mb-2 mt-2 text-center border col-md-6 ml-5'>";
+					htm += temps[i];
+					if(isCelsius){
+						htm+= cTof + convertTemp(temps[i], true) + c2fResult; 
+						console.log(convertTemp(temps[i], true));
+					}
+					if(isCelsius==false){
+						htm+= fToc + convertTemp(temps[i], false) + f2cResult; 
+						console.log(convertTemp(temps[i], false));
+					}	
+					htm += "</div>";
+				}
+					htm += "</div>";
+				docG("tempresult").innerHTML=htm;
+
+				}
+
+		let go = () => {
+			let tempElem = docG("tempInput");
+			tempElem.value= 22;
+			tempAdded();
+			tempElem.value= 44;
+			tempAdded();
+			tempElem.value= 66;
+			tempAdded();
+				}
+		go();
+
+		docG("unitSelect").addEventListener('change', function(e){
+			let selected = docG("unitSelect").value;
+			console.log(selected); 
+			const CASE_FAHRENHEIT = 'F';
+			const CASE_CELSIUS = 'C';
+			let tempElem = docG("tempInput");
+			if(selected == CASE_FAHRENHEIT){
+				docG("unitSelect1").value =  "C";
+				isCelsius = false;
+				tempAdded();
+					}	
+			if(selected == CASE_CELSIUS){
+				docG("unitSelect1").value =  "F";
+				isCelsius = true;
+				tempAdded();
+					}
+				});
+
+		docG("unitSelect1").addEventListener('change', function(e){
+			let selected = docG("unitSelect1").value;
+			console.log(selected); 
+			const CASE_FAHRENHEIT = 'F';
+			const CASE_CELSIUS = 'C';
+			let tempElem = docG("tempInput");
+			if(selected == CASE_FAHRENHEIT){
+				docG("unitSelect").value =  "C";
+				isCelsius = true;
+				tempAdded();
+					}	
+			if(selected == CASE_CELSIUS){
+				docG("unitSelect").value =  "F";
+				isCelsius = false;
+				tempAdded();
+					}
+		
+				});
+		docG("tempInput").addEventListener("keydown", function(e){
+					if(e.code === "Enter"){
+							e.preventDefault();
+							tempAdded();
+							}
+				console.log("enterClicked");
+				})
+		docG("tempresult").addEventListener("click", resultClicked);
+
+
+	</script>
+</html>
