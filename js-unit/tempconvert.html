@@ -39,7 +39,7 @@
                 <p class="p-2 text-center bg-success rounded text-white font-weight-bold col-md-auto ml-4" style="font-size:30px;">Result</p>   
                 <div class="d-block input-group ">
                   <div class="input-group-append">
-                    <input disabled type="number" class="form-control ml-4" placeholder="" aria-label="" aria-describedby="basic-addon1" style=margin-right:10px;>
+                    <input disabled id="tempresultbox" type="number" class="form-control ml-4" placeholder="" aria-label="" aria-describedby="basic-addon1" style=margin-right:10px;>
 					<select id="unitSelect1" class="bg-info rounded md-4"> 
 						<option value="F" >Farenheit</a>
                         <option value="C">Celsius</a>
@@ -104,17 +104,18 @@
 					if(isCelsius){
 						htm+= cTof + convertTemp(temps[i], true) + c2fResult; 
 						console.log(convertTemp(temps[i], true));
+						docG("tempresultbox").value = convertTemp(temps[i], true);
 					}
 					if(isCelsius==false){
 						htm+= fToc + convertTemp(temps[i], false) + f2cResult; 
 						console.log(convertTemp(temps[i], false));
+						docG("tempresultbox").value = convertTemp(temps[i], false);
 					}
 					htm += "</div>";
 				}
 					htm += "</div>";
 				docG("tempresult").innerHTML=htm;
 
-			tempElem.value = "";
 			tempElem.focus();
 				}
 
