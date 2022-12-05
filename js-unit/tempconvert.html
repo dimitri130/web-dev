@@ -95,21 +95,26 @@
 							tempElem.select();
 							return;
 					}
-			temps.push(tempVal);
+
+			if(isCelsius){
+			temps.push(tempVal + cTof+convertTemp(tempVal, true)+c2fResult);
+					}
+			if(isCelsius==false){
+			temps.push(tempVal + fToc+convertTemp(tempVal, false)+f2cResult);
+					}
+
 			let htm = "<div class='row'>";
 				for(let i = 0; i<temps.length; i++){
 					console.log(temps[i])
 					htm += "<div id='temp_" + i + "' class='p-2 mb-2 mt-2 text-center border col-md-6 ml-5'>";
 					htm += temps[i];
 					if(isCelsius){
-						htm+= cTof + convertTemp(temps[i], true) + c2fResult; 
 						console.log(convertTemp(temps[i], true));
-						docG("tempresultbox").value = convertTemp(temps[i], true);
+						docG("tempresultbox").value = convertTemp(tempVal, true);
 					}
 					if(isCelsius==false){
-						htm+= fToc + convertTemp(temps[i], false) + f2cResult; 
 						console.log(convertTemp(temps[i], false));
-						docG("tempresultbox").value = convertTemp(temps[i], false);
+						docG("tempresultbox").value = convertTemp(tempVal, false);
 					}
 					htm += "</div>";
 				}
@@ -134,11 +139,9 @@
 					htm += "<div id='temp_" + i + "' class='p-2 mb-2 mt-2 text-center border col-md-6 ml-5'>";
 					htm += temps[i];
 					if(isCelsius){
-						htm+= cTof + convertTemp(temps[i], true) + c2fResult; 
 						console.log(convertTemp(temps[i], true));
 					}
 					if(isCelsius==false){
-						htm+= fToc + convertTemp(temps[i], false) + f2cResult; 
 						console.log(convertTemp(temps[i], false));
 					}	
 					htm += "</div>";
