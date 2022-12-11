@@ -10,15 +10,317 @@
 
     <title>Registration</title>
   </head>
+
   <body>
-	  <p class="h1 p-2 font-weight-bold">Register for Mr M.'s Premium Content</p>
-	  <p class="h5 border p-3 pb-5"> Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</p>
-	  <form action = "">
+	  <div class="h1 p-2 font-weight-bold text-center">Register for Mr M.'s Premium Content</div>
+	  <div class="text-center h6 ml-4 mr-4 d-block border rounded p-4"> Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</div>
+
+	  <form action = "" class="border rounded m-4">
+		<div class="container col-12">
+		<div class="row border rounded">
+			<div class="col-8 d-inline">
+
+				<div class="input-group mt-3 mb-3">
+          			<div class="input-group-prepend">
+            			<span class="input-group-text" id="usernameBox">Username</span>
+          			</div>
+          			<input type="text" class="form-control" id="username" placeholder="Username123" aria-label="username" aria-describedby="usernameBox">
+        		</div>
+
+				<div class="input-group mb-3">
+          			<div class="input-group-prepend">
+            			<span class="input-group-text" id="ageBox">Age</span>
+          			</div>
+          			<input type="text" class="form-control" id="age" placeholder="#" aria-label="age" aria-describedby="ageBox">
+        		</div>
+			</div>
+
+			<div class="col-4 border-left d-inline ">
+				<div class="form-check">
+					<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="gender" value="male" id="m"> Male
+					</label>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="gender" value="female" id="f"> Female 
+					</label>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="gender" value="other" id="Other"> Other 
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row border rounded">
+			<div class="col-12">
+
+				<div class="input-group mt-3 mb-3">
+          			<div class="input-group-prepend">
+            			<span class="input-group-text" id="passwordBox">Password</span>
+          			</div>
+          			<input type="text" class="form-control" id="pword" placeholder="password123" aria-label="password" aria-describedby="passwordBox">
+        		</div>
+
+				<div class="input-group mt-3 mb-3">
+          			<div class="input-group-prepend">
+            			<span class="input-group-text" id="emailBox">Email</span>
+          			</div>
+          			<input type="text" class="form-control" id="email1" placeholder="email@gmail.com" aria-label="email1" aria-describedby="emailBox">
+        		</div>
+
+				<div class="input-group mt-3 mb-3">
+          			<div class="input-group-prepend">
+            			<span class="input-group-text" id="emailBox2">Email</span>
+          			</div>
+          			<input type="text" class="form-control" id="email2" placeholder="email@gmail.com" aria-label="email2" aria-describedby="emailBox2">
+        		</div>
+		</div>
+		</div>
+		</div>
 	  </form>
 
+	<div class="row">
+	<div class="ml-5">
+        <button id="registerBttn" type="btn" value="login" class="btn btn-primary btn-lg"> register </button>
+	    <button id="testBttn" type="btn" value="login" class="btn btn-warning btn-lg"> test </button>
+      </div>
+	</div>
+	<div class="row">
+	<div id="feedback" style="display:none;" class=""></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+ 
+	<script>
+		let docG = (id) => {
+        return document.getElementById(id);}
+
+		let registerClicked = () =>{
+				
+		let errorDiv = docG("feedback");
+		errorDiv.style.display="none";	
+	    let usernameError= false;
+		let ageError= false;
+		let pwordError= false;
+		let emailError= false;
+		let genderError= false;
+		let generalError = false;
+		let usernameElem = docG("username")
+		let ageElem = docG("age");
+        let pwordElem = docG("pword");
+		let emailElem = docG("email1");
+		let emailElem2 = docG("email2");
+
+		let usernameTest = isValidUsername(usernameElem.value);
+		console.log("usernameTest: " + usernameTest);
+
+		let ageTest = isValidAge(ageElem.value);
+		console.log("ageTest: " + ageTest);
+
+		let pwordTest = isValidPword(pwordElem.value);
+		console.log("pwordTest: " + pwordTest);
+
+		let emailTest = isValidEmail(emailElem.value);
+		console.log("emailTest: " + emailTest);
+		let emailTest2 = isValidEmail(emailElem2.value);
+		console.log("emailTest2: " + emailTest2);			
+
+		let genderTest = isValidGender();
+		console.log("isValidGender: " + isValidGender());
+		console.log("genderTest: " + genderTest);
+
+        console.log("registerClicked()");
+
+		if (usernameTest === false){
+		  $("#feedback").fadeIn();
+          errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " <p> Your username does not meet the criteria </p>";
+          errorDiv.innerHTML += " <ul> ";
+          errorDiv.innerHTML += " <li> At least 5 characters </li>";
+          errorDiv.innerHTML += " </ul>";
+          usernameElem.select();
+          usernameError= true;
+		  generalError = true; 
+				}
+
+		if(ageTest === false){
+		  $("#feedback").fadeIn();
+          errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " <p> You are underage go away please</p>";
+          errorDiv.innerHTML += " <ul> ";
+          errorDiv.innerHTML += " <li> At least 18 years of age </li>";
+          errorDiv.innerHTML += " </ul>";
+          ageElem.select();
+          ageError = true;
+		  generalError = true; 
+				}
+
+        if (pwordTest=== false) {
+		  $("#feedback").fadeIn();
+          errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " <p> Your password does not meet the criteria </p>";
+          errorDiv.innerHTML += " <ul> ";
+          errorDiv.innerHTML += " <li> At least 5 characters </li>";
+          errorDiv.innerHTML += " <li> NO dollar sign($) </li>";
+          errorDiv.innerHTML += " <li> NO asterisk( * ) </li>";
+          errorDiv.innerHTML += " </ul>";
+          pwordElem.select();
+          pwordError = true;
+		  generalError = true; 
+        }
+
+		if(emailTest===false){
+		  $("#feedback").fadeIn();
+			errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2";
+					errorDiv.innerHTML = " <p> Your email does not meet the criteria </p>";
+          errorDiv.innerHTML += " <ul> ";
+          errorDiv.innerHTML += " <li> At least 5 characters </li>";
+          errorDiv.innerHTML += " <li> Must contain the @ symbol  </li>";
+          errorDiv.innerHTML += " <li> Must contain the . symbol </li>";
+	      errorDiv.innerHTML += " <li> The @ symbol must come before the . symbol </li>";	
+		  errorDiv.innerHTML += "<li> Your emails must match </li>";
+          errorDiv.innerHTML += " </ul>";
+          emailElem.select();
+          emailError = true;
+		  generalError = true;
+				}
+
+		 if(emailTest2===false){
+		  $("#feedback").fadeIn();
+			errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2";
+			errorDiv.innerHTML = " <p> Your email does not meet the criteria </p>";
+          errorDiv.innerHTML += " <ul> ";
+          errorDiv.innerHTML += " <li> At least 5 characters </li>";
+          errorDiv.innerHTML += " <li> Must contain the @ symbol  </li>";
+          errorDiv.innerHTML += " <li> Must contain the . symbol </li>";
+	      errorDiv.innerHTML += " <li> The @ symbol must come before the . symbol </li>";	
+		  errorDiv.innerHTML += "<li> Your emails must match </li>";
+          errorDiv.innerHTML += " </ul>";
+          emailElem.select();
+          emailError = true;
+		  generalError = true;
+				}
+
+        if (genderTest===false){
+		  $("#feedback").fadeIn();
+          errorDiv.className = "bg-danger col-12 d-block text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " <p> Please select a gender </p>";
+          errorDiv.innerHTML += " <ul> ";
+					errorDiv.innerHTML += " <li> Must select a gender </li>";
+          errorDiv.innerHTML += " </ul>";
+          genderError= true;
+		  generalError = true; 
+				}
+
+        if (generalError === false) {
+	      $("#feedback").fadeIn();
+          errorDiv.className = "bg-info col-12 d-block text-light m-4 p-4 mt-2 ";
+          errorDiv.innerHTML = " <p> Thank you for registering </p>";
+    }
+					console.log("generalError: " + generalError);
+	}
+					
+
+		let isValidUsername= (str) => 
+		{ console.log("(isValidUsername" + str + ")"); 
+		if (str.length<5){ return false; } 
+		return true;
+			  }
+
+		let isValidAge= (num) => 
+		{ console.log("(isValidAge" + num + ")"); 
+		if (num<18){ return false; } 
+		return true;
+			  }
+
+        let isValidPword = (str) => {
+        console.log("(isValidPword " + str + ")");
+        if (str.length < 5) {
+          return false;
+        }
+        if (str.indexOf("$") > -1) {
+          return false;
+        }
+        if (str.indexOf("*") > -1) {
+          return false;
+        }
+        return true;
+      }
+
+		let isValidEmail = (str) => 
+		{ console.log("(isValidEmail" + str + ")"); 
+		let indexOfAtsign = str.indexOf("@"); 
+		let indexOfPeriod = str.indexOf("."); 
+		let email2 = docG("email2");
+		if (str.length<5){ return false; } 
+		if (indexOfAtsign<0){ return false;}
+		if (indexOfPeriod<0){ return false;} 
+		if (indexOfAtsign>indexOfPeriod){ return false;}	
+		if(!email2.value === str){return false;}
+		return true;
+			  }
+
+		let isValidEmail2 = (str) => 
+		{ console.log("(isValidEmail" + str + ")"); 
+		let indexOfAtsign = str.indexOf("@"); 
+		let indexOfPeriod = str.indexOf("."); 
+		let email = docG("email");
+		if (str.length<5){ return false; } 
+		if (indexOfAtsign<0){ return false;}
+		if (indexOfPeriod<0){ return false;} 
+		if (indexOfAtsign>indexOfPeriod){ return false;}	
+		if(!email.value === str){return false;}
+		return true;
+			  }
+
+
+		let isValidGender = () => {
+			var checkRadio = document.querySelector('input[name="gender"]:checked');
+            if(checkRadio === null ) {
+			return false;
+            }
+			return true;
+				}	
+		
+		let tempFormat = () => {
+		docG("username").value="farter";
+		docG("age").value="19";
+		docG("pword").value="peepoopee";
+		docG("email1").value="bruhhouse@gmail.com";
+		docG("email2").value="bruhhouse@gmail.com";
+		docG("Other").checked = true;
+		registerClicked();
+				}
+		
+		let clearAll = () =>{
+		docG("username").value="";
+		docG("age").value="";
+		docG("pword").value="";
+		docG("email1").value="";
+		docG("email2").value="";
+		docG("m").checked = false;
+		docG("f").checked = false;
+		docG("Other").checked = false;
+		}
+
+	  const pageAccessedByReload = (
+  (window.performance.navigation && window.performance.navigation.type === 1) ||
+    window.performance
+      .getEntriesByType('navigation')
+      .map((nav) => nav.type)
+      .includes('reload')
+);
+
+	  window.addEventListener('load', clearAll);
+      window.addEventListener('load', docG("username").select());
+	  docG("testBttn").addEventListener('click', tempFormat);
+      docG("registerBttn").addEventListener("click", registerClicked);
+   
+	</script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
