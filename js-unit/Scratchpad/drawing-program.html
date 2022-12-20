@@ -1,0 +1,157 @@
+<html>
+    <script type="text/javascript">
+    var canvas, ctx, custColor, flag = false,
+        prevX = 0,
+        currX = 0,
+        prevY = 0,
+        currY = 0,
+        dot_flag = false;
+
+
+    var x = "black",
+        y = 2;
+    
+	let docG = (id) =>  {return document.getElementById(id);}
+
+		let init = () => {
+        canvas = document.getElementById('can');
+        ctx = canvas.getContext("2d");
+        w = canvas.width;
+        h = canvas.height;
+    
+        canvas.addEventListener("mousemove", function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", function (e) {
+            findxy('out', e)
+        }, false);
+    }
+    
+	let color = (obj) => {
+        switch (obj.id) {
+            case "green":
+                x = "green";
+                break;
+            case "blue":
+                x = "blue";
+                break;
+            case "red":
+                x = "red";
+                break;
+            case "yellow":
+                x = "yellow";
+                break;
+            case "orange":
+                x = "orange";
+                break;
+			case "purple":
+				x = "purple";
+				break;
+            case "black":
+                x = "black";
+                break;
+            case "white":
+                x = "white";
+                break;
+		}
+    }
+
+	let changeColor = () =>{
+   		docG("custom").addEventListener('change', (e) => {
+        x = e.target.value;
+    	});
+	};
+
+	let changeSize = () =>{
+		docG("sizer").addEventListener('change', (e) =>{
+		y=e.target.value;
+		console.log(y);
+		});	
+	};
+
+	let draw = () => {
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        ctx.strokeStyle = x;
+        ctx.lineWidth = y;
+        ctx.stroke();
+        ctx.closePath();
+    }
+	
+    
+	let erase = () => {
+        var m = confirm("Are you sure? You'll lose your bootylicious artwork!");
+        if (m) {
+            ctx.clearRect(0, 0, w, h);
+            docG("canvasimg").style.display = "none";
+        }
+    }
+    
+	let save = () => {
+        docG("canvasimg").style.border = "2px solid";
+        var dataURL = canvas.toDataURL();
+        docG("canvasimg").src = dataURL;
+        docG("canvasimg").style.display = "inline";
+    }
+    
+	let findxy = (res, e) => {
+        if (res == 'down') {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvas.offsetLeft;
+            currY = e.clientY - canvas.offsetTop;
+    
+            flag = true;
+            dot_flag = true;
+            if (dot_flag) {
+                ctx.beginPath();
+                ctx.fillStyle = x;
+                ctx.fillRect(currX, currY, 2, 2);
+                ctx.closePath();
+                dot_flag = false;
+            }
+        }
+        if (res == 'up' || res == "out") {
+            flag = false;
+        }
+        if (res == 'move') {
+            if (flag) {
+                prevX = currX;
+                prevY = currY;
+                currX = e.clientX - canvas.offsetLeft;
+                currY = e.clientY - canvas.offsetTop;
+                draw();
+            }
+        }
+		
+    }
+
+    </script>
+    <body onload="init()">
+        <canvas id="can" width="1500" height="630" style="position:absolute;top:9%;left:1%;border:2px solid;"></canvas>
+        <div style="position:absolute;top:1%;left:5%;width:50px;height:50px;background:red;" id="red" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:10%;width:50px;height:50px;background:orange;" id="orange" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:15%;width:50px;height:50px;background:yellow;" id="yellow" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:20%;width:50px;height:50px;background:green;" id="green" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:25%;width:50px;height:50px;background:blue;" id="blue" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:30%;width:50px;height:50px;background:purple;" id="purple" onclick="color(this)"></div>
+        <div style="position:absolute;top:1%;left:35%;width:50px;height:50px;background:black;" id="black" onclick="color(this)"></div>
+		<input type="color" style="position:absolute;top:1%;left:40%;width:50px;height:50px;" id="custom" onclick="changeColor()" input>
+        <div style="position:absolute;top:1%;left:45%;width:48px;height:48px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
+		<div style="position:absolute;top:1%;left:45.3%;">Eraser</div>
+		<div style="position:absolute;top:1%;left:53%;">Brush Size</div>
+		<div class="slidecontainer" style="position:absolute;top:5%;left:50%;" onclick="changeSize()">
+			<input type="range" min="1" max="50" value="2" class="slider" id="sizer" >
+		</div>
+        <img id="canvasimg" style="position:absolute;top:101%;left:1%;display:none;">
+        <input type="button" value="save" id="btn" size="30" onclick="save()" style="position:absolute;top:3%;left:65%;">
+        <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:3%;left:70%;">
+    </body>
+    </html>
