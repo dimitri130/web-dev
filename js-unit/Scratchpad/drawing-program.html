@@ -1,4 +1,5 @@
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
     <script type="text/javascript">
     var canvas, ctx, custColor, flag = false,
         prevX = 0,
@@ -59,21 +60,21 @@
             case "white":
                 x = "white";
                 break;
+			case "custom":
+				x = docG("custom").value; 
 		}
     }
 
-	let changeColor = () =>{
-   		docG("custom").addEventListener('change', (e) => {
-        x = e.target.value;
-    	});
-	};
-
-	let changeSize = () =>{
+	
+	$(document).ready(function(){
 		docG("sizer").addEventListener('change', (e) =>{
 		y=e.target.value;
 		console.log(y);
 		});	
-	};
+   		docG("custom").addEventListener('change', (e) => {
+        x = e.target.value;
+    	});
+			})
 
 	let draw = () => {
         ctx.beginPath();
@@ -143,11 +144,11 @@
         <div style="position:absolute;top:1%;left:25%;width:50px;height:50px;background:blue;" id="blue" onclick="color(this)"></div>
         <div style="position:absolute;top:1%;left:30%;width:50px;height:50px;background:purple;" id="purple" onclick="color(this)"></div>
         <div style="position:absolute;top:1%;left:35%;width:50px;height:50px;background:black;" id="black" onclick="color(this)"></div>
-		<input type="color" style="position:absolute;top:1%;left:40%;width:50px;height:50px;" id="custom" onclick="changeColor()" input>
+		<input type="color" style="position:absolute;top:1%;left:40%;width:50px;height:50px;" id="custom" onclick="color(this)" input>
         <div style="position:absolute;top:1%;left:45%;width:48px;height:48px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
 		<div style="position:absolute;top:1%;left:45.3%;">Eraser</div>
 		<div style="position:absolute;top:1%;left:53%;">Brush Size</div>
-		<div class="slidecontainer" style="position:absolute;top:5%;left:50%;" onclick="changeSize()">
+		<div class="slidecontainer" style="position:absolute;top:5%;left:50%;">
 			<input type="range" min="1" max="50" value="2" class="slider" id="sizer" >
 		</div>
         <img id="canvasimg" style="position:absolute;top:101%;left:1%;display:none;">
