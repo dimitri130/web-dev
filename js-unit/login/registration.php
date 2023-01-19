@@ -1,3 +1,6 @@
+<?php 
+declare(strict_types=1);
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,10 +15,105 @@
   </head>
 
   <body>
+<?php
+
+var_dump($_POST);
+
+$debug = true;
+$recaptchaData = recaptcha();
+$feedback = '';
+
+function recaptcha():array{
+	$n1=mt_rand(1,20);
+	$n2=mt_rand(1,20);
+	$arr = array(
+		'n1'=> $n1,
+		'n2'=> $n2,
+		'sum'=>$n1 + $n2);
+	return $arr;
+}
+
+	function validEmail(string $email):bool{
+		$email = trim($email);
+		if(strlen($email)<5)
+			return false;
+		$atAt = strpos($email, '@');
+		$dotAt = strpos($email, '.' );
+		if(false === $dotAt)
+			return false;
+		if(false ===$atAt)
+			return false;
+		if($dotAt<$atAt)
+			return false;
+		return true;
+}
+	function validUsername(string $username):bool{
+		$username = trim($username);
+		if(strlen($username)<5)
+			return false;
+		return true;
+	}
+
+	function validPassword(string $pword):bool{
+		$pword = trim($pword);
+		if(strlen($pword)<5)
+			return false;
+		$dollarAt = strpos($pword, '$');
+		$asteriskAt = strpos($pword, '*');
+		if(!false === $dollarAt)
+			return false;
+		if(!false === $asteriskAt)
+			return false;
+		return true;
+}
+
+	function validAge(string $age):bool{
+		$age = trim($age);
+		if($age<18)
+			return false;
+		return true;
+	}
+
+
+$bFormSubmitted = isset($_POST['email1']);
+
+if ($bFormSubmitted ===true){
+	$email1 = $_POST['email1'];
+	$email2 = $_POST['email2'];
+	$username = $_POST['username'];
+	$pword = $_POST['pword'];
+	$age = $_POST['age'];
+
+	$bValidEmail = validEmail($email1);
+	if($email1 != $email2)
+		$feedback .= 'Your emails do not match';
+	else if(false===$bValidEmail)
+		$feedback .= $_POST['email1'] . ' is not valid';
+
+
+	$bValidUsername = validUsername($username);
+	if(false===$bValidUsername)
+		$feedback .= $_POST['username'] . ' is not valid';
+
+	$bValidPword = validPassword($pword);
+	if(false === $bValidPword)
+		$feedback .= $_POST['pword'] . ' is not valid';
+
+	$bValidAge = validAge($age);
+	if(false===$bValidAge)
+		$feedback .= $_POST['age'] . ' is not valid';
+
+	if($_POST['antibotanswer'] != $_POST['captchaAns'])
+		echo $_POST['antibotanswer']; 
+	echo $_POST['captchaAns'];
+		$feedback .= $_POST['antibotanswer'] .  ' is not correct';
+}
+?>
+
 	  <div class="h1 p-2 font-weight-bold text-center">Register for Mr M.'s Premium Content</div>
 	  <div class="text-center h6 ml-4 mr-4 d-block border rounded p-4"> Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</div>
 
-	  <form action = "" class="border rounded m-4">
+	  <form id="regform" method="post" action = "" class="border rounded m-4">
 		<div class="container col-12">
 		<div class="row border rounded">
 			<div class="col-8 d-inline">
@@ -24,14 +122,14 @@
           			<div class="input-group-prepend">
             			<span class="input-group-text" id="usernameBox">Username</span>
           			</div>
-          			<input type="text" class="form-control" id="username" placeholder="Username123" aria-label="username" aria-describedby="usernameBox">
+          			<input type="text" class="form-control" name="username" id="username" placeholder="Username123" aria-label="username" aria-describedby="usernameBox">
         		</div>
 
 				<div class="input-group mb-3">
           			<div class="input-group-prepend">
             			<span class="input-group-text" id="ageBox">Age</span>
           			</div>
-          			<input type="text" class="form-control" id="age" placeholder="#" aria-label="age" aria-describedby="ageBox">
+          			<input type="text" class="form-control" name="age" id="age" placeholder="#" aria-label="age" aria-describedby="ageBox">
         		</div>
 			</div>
 
@@ -61,36 +159,52 @@
           			<div class="input-group-prepend">
             			<span class="input-group-text" id="passwordBox">Password</span>
           			</div>
-          			<input type="text" class="form-control" id="pword" placeholder="password123" aria-label="password" aria-describedby="passwordBox">
+          			<input type="text" class="form-control" name="pword" id="pword" placeholder="password123" aria-label="password" aria-describedby="passwordBox">
         		</div>
 
 				<div class="input-group mt-3 mb-3">
           			<div class="input-group-prepend">
             			<span class="input-group-text" id="emailBox">Email</span>
           			</div>
-          			<input type="text" class="form-control" id="email1" placeholder="email@gmail.com" aria-label="email1" aria-describedby="emailBox">
+          			<input type="text" class="form-control" name="email1" id="email1" placeholder="email@gmail.com" aria-label="email1" aria-describedby="emailBox">
         		</div>
 
 				<div class="input-group mt-3 mb-3">
           			<div class="input-group-prepend">
-            			<span class="input-group-text" id="emailBox2">Email</span>
+						<span class="input-group-text" name="emailBox2" id="emailBox2">Email</span>
           			</div>
-          			<input type="text" class="form-control" id="email2" placeholder="email@gmail.com" aria-label="email2" aria-describedby="emailBox2">
+          			<input type="text" class="form-control" name="email2" id="email2" placeholder="email@gmail.com" aria-label="email2" aria-describedby="emailBox2">
         		</div>
+
+		<div class="input-group mb-3  ">
+                  <div class="input-group-prepend ">
+				  <span class="input-group-text" ><span id="botq"> What is <?php echo $recaptchaData['n1']; ?> + <?php echo $recaptchaData['n2'];?> </span> </span>
+                  </div>
+                  <input class="form-control loginform" type="number" name="antibotanswer" id="antibotanswer" value='' placeholder="enter solution"  />
+                </div>
 		</div>
 		</div>
+		<input name="captchaAns" type="text" value="<?php echo $recaptchaData['sum']; ?>"/>
 		</div>
-	  </form>
 
 	<div class="row">
 	<div class="ml-5">
         <button id="registerBttn" type="btn" value="login" class="btn btn-primary btn-lg"> register </button>
-	    <button id="testBttn" type="btn" value="login" class="btn btn-warning btn-lg"> test </button>
       </div>
 	</div>
 	<div class="row">
+
+	<?php 
+	if($bFormSubmitted && strlen($feedback)>0){
+		echo '<div class="col-12 bg-danger text-white mt-4 p-3" >'; 
+		echo $feedback; 
+		echo ' </div>';
+	}
+
+?>
 	<div id="feedback" style="display:none;" class=""></div>
 
+	</form>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
  
 	<script>
@@ -217,7 +331,7 @@
         if (generalError === false) {
 	      $("#feedback").fadeIn();
           errorDiv.className = "bg-info col-12 d-block text-light m-4 p-4 mt-2 ";
-          errorDiv.innerHTML = " <p> Thank you for registering </p>";
+		  docG("regform").submit();
     }
 					console.log("generalError: " + generalError);
 	}
@@ -291,8 +405,7 @@
 		docG("email1").value="bruhhouse@gmail.com";
 		docG("email2").value="bruhhouse@gmail.com";
 		docG("Other").checked = true;
-		registerClicked();
-				}
+		}
 		
 		let clearAll = () =>{
 		docG("username").value="";
@@ -315,7 +428,7 @@
 
 	  window.addEventListener('load', clearAll);
       window.addEventListener('load', docG("username").select());
-	  docG("testBttn").addEventListener('click', tempFormat);
+      window.addEventListener('load', tempFormat); 
       docG("registerBttn").addEventListener("click", registerClicked);
    
 	</script>
