@@ -1,25 +1,11 @@
 <?php 
 declare(strict_types=1);
-?>
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+$debug = false;
 
-    <title>Registration</title>
-  </head>
-
-  <body>
-<?php
-
+if($debug == true)
 var_dump($_POST);
 
-$debug = true;
 $recaptchaData = recaptcha();
 $feedback = '';
 
@@ -86,30 +72,50 @@ if ($bFormSubmitted ===true){
 
 	$bValidEmail = validEmail($email1);
 	if($email1 != $email2)
-		$feedback .= 'Your emails do not match';
+		$feedback .= 'Your emails do not match' . '<br>';
 	else if(false===$bValidEmail)
-		$feedback .= $_POST['email1'] . ' is not valid';
-
+		$feedback .=  $_POST['email1'] . ' is not valid' . '<br>' ;
 
 	$bValidUsername = validUsername($username);
 	if(false===$bValidUsername)
-		$feedback .= $_POST['username'] . ' is not valid';
+		$feedback .= $_POST['username'] . ' is not valid' . '<br>';
 
 	$bValidPword = validPassword($pword);
 	if(false === $bValidPword)
-		$feedback .= $_POST['pword'] . ' is not valid';
+		$feedback .= $_POST['pword'] . ' is not valid' . '<br>';
 
 	$bValidAge = validAge($age);
 	if(false===$bValidAge)
-		$feedback .= $_POST['age'] . ' is not valid';
+		$feedback .= $_POST['age'] . ' is not valid' . '<br>';
 
-	if($_POST['antibotanswer'] != $_POST['captchaAns'])
-		echo $_POST['antibotanswer']; 
-	echo $_POST['captchaAns'];
-		$feedback .= $_POST['antibotanswer'] .  ' is not correct';
+	if($_POST['antibotanswer'] != $_POST['captchaAns']){
+		if(strlen($_POST['antibotanswer'])<1){
+			$feedback .= 'Please answer the anti-bot question.' . '<br>';
+		}
+		else{
+		$feedback .= $_POST['antibotanswer'] .  ' is not correct' . '<br>';
+		}
+	}
+
+	if(strlen($feedback)<1)
+		header('Location: dashboard.php');
 }
 ?>
 
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Registration</title>
+  </head>
+
+  <body>
 	  <div class="h1 p-2 font-weight-bold text-center">Register for Mr M.'s Premium Content</div>
 	  <div class="text-center h6 ml-4 mr-4 d-block border rounded p-4"> Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</div>
 
@@ -184,7 +190,7 @@ if ($bFormSubmitted ===true){
                 </div>
 		</div>
 		</div>
-		<input name="captchaAns" type="text" value="<?php echo $recaptchaData['sum']; ?>"/>
+		<input name="captchaAns" type="hidden" value="<?php echo $recaptchaData['sum']; ?>"/>
 		</div>
 
 	<div class="row">
