@@ -1,3 +1,84 @@
+<?php
+
+declare(strict_types = 1);
+$debug = false;
+if($debug==true)
+	var_dump($_POST);
+
+$recaptchaData = recaptcha();
+$captchaHash = hash('sha256', strval($recaptchaData['sum']));
+
+$feedback = '';
+
+function recaptcha():array{
+	$n1=mt_rand(1,20);
+	$n2=mt_rand(1,20);
+	$arr = array(
+		'n1'=> $n1,
+		'n2'=> $n2,
+		'sum'=>$n1 + $n2);
+	return $arr;
+}
+	function validEmail(string $email):bool{
+		$email = trim($email);
+		if(strlen($email)<5)
+			return false;
+		$atAt = strpos($email, '@');
+		$dotAt = strpos($email, '.' );
+		if(false === $dotAt)
+			return false;
+		if(false ===$atAt)
+			return false;
+		if($dotAt<$atAt)
+			return false;
+		return true;
+}
+
+	function validPassword(string $pword):bool{
+		$pword = trim($pword);
+		if(strlen($pword)<5)
+			return false;
+		$dollarAt = strpos($pword, '$');
+		$asteriskAt = strpos($pword, '*');
+		if(!false === $dollarAt)
+			return false;
+		if(!false === $asteriskAt)
+			return false;
+		return true;
+	}
+
+$bFormSubmitted = isset($_POST['email1']);
+
+if ($bFormSubmitted ===true){
+	$email1 = $_POST['email1'];
+	$pword = $_POST['pword1'];
+
+	$bValidEmail = validEmail($email1);
+	if(strlen($_POST['email1'])<1)
+		$feedback .= 'Please input an email' . '<br>';
+	else if(false===$bValidEmail)
+		$feedback .=  $_POST['email1'] . ' is not valid' . '<br>' ;
+
+	$bValidPword = validPassword($pword);
+	if(strlen($_POST['email1'])<1)
+		$feedback .= 'Please input a password' . '<br>';
+	else if(false === $bValidPword)
+		$feedback .= $_POST['pword1'] . ' is not valid' . '<br>';
+
+	if(hash('sha256', strval($_POST['antibotanswer'])) != $_POST['captchaAns']){
+		if(strlen($_POST['antibotanswer'])<1){
+			$feedback .= 'Please answer the anti-bot question.' . '<br>';
+		}
+		else{
+		$feedback .= $_POST['antibotanswer'] .  ' is not correct' . '<br>';
+		}
+	}
+
+	if(strlen($feedback)<1)
+		header('Location: dashboard.php');
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -30,12 +111,13 @@
 		  <option value="emaildotbeforeat">Dot before atsign</option>
         </select>
  </div>
+	  <form id="regform" method="post" action = "" class="border rounded m-4">
 	  <div class="row">
         <div class="input-group mb-3 col-6">
           <div class="input-group-prepend ">
-            <span class="input-group-text" id="usernameBox">Email</span>
+            <span class="input-group-text" id="usernameBox" >Email</span>
           </div>
-          <input type="text" class="form-control" id="email1" placeholder="email@gmail.com" aria-label="username" aria-describedby="usernameBox">
+          <input type="text" class="form-control" name="email1" id="email1" placeholder="email@gmail.com" aria-label="username" aria-describedby="usernameBox">
         </div>
       </div>
       <div class="row">
@@ -43,22 +125,25 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="passwordBox">Password</span>
           </div>
-          <input type="text" class="form-control" id="pword1" placeholder="password" aria-label="password" aria-describedby="passwordBox">
+          <input type="text" class="form-control" id="pword1" name="pword1" placeholder="password" aria-label="password" aria-describedby="passwordBox">
         </div>
       </div>
       <div class="row">
         <div class="input-group mb-3 col-6">
           <div class="input-group-prepend">
             <span class="input-group-text" id="botCheck">
-              <span id="botq">What is x + y</span>
+              <span id="botq">What is <?php echo $recaptchaData['n1']; ?> + <?php echo $recaptchaData['n2'];?></span>
             </span>
           </div>
-          <input type="number" class="form-control loginform" placeholder="enter solution" id="antibotanswer" aria-label="numberCheck" aria-describedby="botCheck">
+          <input type="number" class="form-control loginform" placeholder="enter solution" name="antibotanswer" id="antibotanswer" aria-label="numberCheck" aria-describedby="botCheck">
         </div>
       </div>
+		<input name="captchaAns" type="hidden" value="<?php echo $captchaHash ?>"/>
       <div class="ml-5 mt-3">
         <button id="loginBtn" type="btn" value="login" class="btn btn-primary btn-lg"> login </button>
       </div>
+
+</form>
       <div id="errormsg" style="display:none;">
  
       </div>
@@ -67,10 +152,17 @@
       </div>
 	  <div id="errormsg3" style = "display:none;"> 
 		</div>
+
+	<?php 
+	if($bFormSubmitted && strlen($feedback)>0){
+		echo '<div class="col-12 bg-danger text-white mt-4 p-3" >'; 
+		echo $feedback; 
+		echo ' </div>';
+	}
+
+?>
     </div>
     <script>
-	  let botAnswer = -1;
-
       let docG = (id) => {
         return document.getElementById(id);
       }
@@ -84,11 +176,8 @@
         let bValidPword = isValidPword(pWordElem.value);
 		let emailElem = docG("email1");
 		let cValidEmail = isValidEmail(emailElem.value);
-		let botElem = docG("antibotanswer");
-		let dNotBot= isNotBot(botElem.value);
         console.log("bValidPword : " + bValidPword);
 		console.log("cValidEmail : " + cValidEmail);
-		console.log("dNotBot : " + dNotBot);
         console.log("loginClicked()");
 
         let errorDiv = docG('errormsg');
@@ -120,13 +209,6 @@
           cHasError = true;
 				}
 
-		let errorDiv3 = docG('errormsg3');
-				  if (dNotBot===false){
-					$("#errormsg3").fadeIn();
-							  errorDiv3.className = "bg-danger text-light m-4 p-4 mt-2";
-							  errorDiv3.innerHTML = "<p> Failed bot check </p>";
-							  dHasError=true;
-						  }
 				
         if (bHasError === false) {
 					$("#errormsg").fadeOut();}
@@ -135,19 +217,8 @@
       
 		if (dHasError === false){
 					$("#errormsg3").fadeOut();}
-
-				  generateBotQ();
     }
 
-      let generateBotQ = () => {
-        console.log("generateBotQ()")
-        let botQuest = docG('botq');
-        let n1 = Math.floor(Math.random() * 21) + 2;
-        let n2 = Math.floor(Math.random() * 21) + 2; 
-		botAnswer = n1 + n2; 
-		console.log('botAnswer' + botAnswer); 
-		botQuest.innerHTML = "What is " + n1 + " + " + n2 + " ?"; 
-		} 
 
 		let isValidEmail = (str) => 
 		{ console.log("(isValidEmail " + str + ")"); 
@@ -175,14 +246,6 @@
 	
       }
 
-	  let isNotBot = (num) => {
-		console.log("(isNotBot " + num + ")"); 
-		if(num!=botAnswer){ 
-			return false;
-						  }
-				  return true;
-			  }
-      window.addEventListener('load', generateBotQ);
       docG("loginBtn").addEventListener("click", loginClicked);
       let pWordSelect = docG("pwordselect");
       pWordSelect.addEventListener('change', function(e) {
