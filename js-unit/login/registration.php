@@ -1,5 +1,6 @@
 <?php 
 declare(strict_types=1);
+require('../../includes/db.php');
 
 $debug = false;
 
@@ -7,6 +8,7 @@ if($debug == true)
 var_dump($_POST);
 
 $recaptchaData = recaptcha();
+$captchaHash = hash('sha256', strval($recaptchaData['sum']));
 $feedback = '';
 
 function recaptcha():array{
@@ -88,7 +90,8 @@ if ($bFormSubmitted ===true){
 	if(false===$bValidAge)
 		$feedback .= $_POST['age'] . ' is not valid' . '<br>';
 
-	if($_POST['antibotanswer'] != $_POST['captchaAns']){
+
+	if(hash('sha256', strval($_POST['antibotanswer'])) != $_POST['captchaAns']){
 		if(strlen($_POST['antibotanswer'])<1){
 			$feedback .= 'Please answer the anti-bot question.' . '<br>';
 		}
@@ -97,8 +100,10 @@ if ($bFormSubmitted ===true){
 		}
 	}
 
-	if(strlen($feedback)<1)
+	if(strlen($feedback)<1){
+		register($email1, $pword, intval($age), $username);
 		header('Location: dashboard.php');
+	}
 }
 ?>
 
@@ -190,7 +195,7 @@ if ($bFormSubmitted ===true){
                 </div>
 		</div>
 		</div>
-		<input name="captchaAns" type="hidden" value="<?php echo $recaptchaData['sum']; ?>"/>
+		<input name="captchaAns" type="hidden" value="<?php echo $captchaHash; ?>"/>
 		</div>
 
 	<div class="row">
@@ -198,19 +203,18 @@ if ($bFormSubmitted ===true){
         <button id="registerBttn" type="btn" value="login" class="btn btn-primary btn-lg"> register </button>
       </div>
 	</div>
-	<div class="row">
+	</form>
 
+	<div class="row">
+	<div id="feedback" style="display:none;" class=""></div>
 	<?php 
 	if($bFormSubmitted && strlen($feedback)>0){
-		echo '<div class="col-12 bg-danger text-white mt-4 p-3" >'; 
+		echo '<div class="col-12 bg-danger text-white ml-2 mt-4 p-3" >'; 
 		echo $feedback; 
 		echo ' </div>';
 	}
 
 ?>
-	<div id="feedback" style="display:none;" class=""></div>
-
-	</form>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
  
 	<script>
